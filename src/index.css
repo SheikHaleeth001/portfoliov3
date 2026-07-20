@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------
+   Global resets & base styles
+--------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  /* Sticky nav is h-16 (64px) tall; this keeps anchor-scrolled
+     sections from landing with their heading hidden underneath it. */
+  scroll-padding-top: 96px;
+}
+
+/* ---------------------------------------------------------
+   Theme variables
+   Values are "R G B" triplets (no commas) so Tailwind's
+   rgb(var(--x) / <alpha-value>) opacity modifiers keep working.
+   Default (no class on <html>) is the dark theme; adding the
+   "light" class switches every color below at once.
+--------------------------------------------------------- */
+:root {
+  --color-bg: 10 10 15;
+  --color-bg2: 12 12 19;
+  --color-card: 17 17 23;
+  --color-card2: 21 21 29;
+  --color-border: 36 36 48;
+  --color-muted: 139 139 154;
+  --color-text: 241 241 245;
+}
+
+html.light {
+  --color-bg: 247 247 251;
+  --color-bg2: 255 255 255;
+  --color-card: 255 255 255;
+  --color-card2: 244 244 249;
+  --color-border: 224 224 233;
+  --color-muted: 100 100 116;
+  --color-text: 18 18 26;
+}
+
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
+  transition: background-color 0.25s ease, color 0.25s ease;
+
+  /* Soft pink/purple glow blobs over the base color, fixed so they
+     don't repeat awkwardly per-section as the page scrolls. */
+  background-image:
+    radial-gradient(ellipse 900px 600px at 12% -8%, rgba(236, 72, 153, 0.16), transparent 60%),
+    radial-gradient(ellipse 1000px 700px at 105% 18%, rgba(168, 85, 247, 0.14), transparent 60%),
+    radial-gradient(ellipse 800px 550px at 45% 105%, rgba(236, 72, 153, 0.09), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+html.light body {
+  /* Same glow positions, softer strength so it stays readable on a
+     light card background instead of muddying it. */
+  background-image:
+    radial-gradient(ellipse 900px 600px at 12% -8%, rgba(236, 72, 153, 0.10), transparent 60%),
+    radial-gradient(ellipse 1000px 700px at 105% 18%, rgba(168, 85, 247, 0.08), transparent 60%),
+    radial-gradient(ellipse 800px 550px at 45% 105%, rgba(236, 72, 153, 0.06), transparent 60%);
+}
+
+/* Gradient text used across headings/accents */
+.grad-text {
+  background-image: theme("backgroundImage.grad");
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Base card surface reused by every section. Semi-transparent with a
+   blur so the page's background glow reads through subtly instead of
+   every card being a flat, opaque block. */
+.surface-card {
+  background-color: rgb(var(--color-card) / 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgb(var(--color-border) / 0.9);
+  border-radius: 1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.surface-card:hover {
+  box-shadow: 0 12px 32px -16px rgba(236, 72, 153, 0.25);
+}
+
+/* Small pink "eyebrow" label used above section headings */
+.eyebrow {
+  color: theme("colors.pink");
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Custom scrollbar so it matches the current theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-bg));
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-border));
+  border-radius: 999px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
